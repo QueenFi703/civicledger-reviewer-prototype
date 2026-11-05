@@ -1,0 +1,9 @@
+export type Doc = { id: string; title: string; caseId: string; version: number; lines: string[] | null };
+export type SourceRef = { docId: string; caseId: string; version: number; hash: string; page: number; start: number; end: number; excerpt: string };
+export type Fixture = { id: string; label: string; description: string; caseId: string; docs: Doc[]; manifest: { complete: boolean; submitted: string[] } | null };
+export type Evidence = { docId: string; amountCents: number | null; raw: string | null; person: string | null; employer: string | null; currency: string | null; basis: string | null; period: string | null; status: 'EXTRACTED' | 'UNKNOWN'; refs: SourceRef[] };
+export type Finding = { id: string; type: 'missing' | 'conflict' | 'not_comparable' | 'incomplete'; ruleId: string; title: string; rationale: string; refs: SourceRef[]; values?: number[]; differenceCents?: number; missingExpectedDocId?: string };
+export type Claim = { text: string; refs: SourceRef[] };
+export type Packet = { caseId: string; fixtureId: string; sourceHash: string; docs: Doc[]; evidence: Evidence[]; findings: Finding[]; claims: Claim[]; suggestedDraft: string; allowedSentences: string[]; draftRefs: SourceRef[]; status: 'DRAFT_READY' | 'NEEDS_REVIEW' | 'FAILED'; stages: {name:string;status:'passed'|'blocked'}[]; versions: {fixture:string;checklist:string;engine:string;model:string;prompt:string}; metrics: {durationMs:number;modelCalls:number;tokens:number}; diagnostics: string[] };
+export type ReviewEvent = { id:string; requestHash:string; reviewerId:string; caseId:string; runId:string; sourceHash:string; draftVersion:number; action:'accepted'|'rejected'|'edited'; reason:string; timestamp:string; text:string };
+export type Run = {id:string; ownerId:string; revision:number; draftVersion:number; status:string; packet:Packet; draftText:string; reviewerNote:string; groundingErrors:string[]; events:ReviewEvent[]; createdAt:string; updatedAt:string};
